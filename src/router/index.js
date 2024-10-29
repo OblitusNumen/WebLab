@@ -7,11 +7,10 @@ import Login from '../components/Login.vue';
 
 const routes = [
     { path: '/', component: Home }, // Default route
-    { path: '/Home', component: Home },
-    { path: '/Catalog', component: Catalog },
-    { path: '/Contacts', component: Contacts },
-    { path: '/About', component: About },
-    { path: '/Login', component: Login },
+    { path: '/catalog', component: Catalog },
+    { path: '/contacts', component: Contacts },
+    { path: '/about', component: About },
+    { path: '/login', component: Login },
 ];
 
 const router = createRouter({
