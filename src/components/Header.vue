@@ -38,7 +38,7 @@ const toLoginName = async () => {
   }
 };
 
-defineExpose({ toLoginName });
+defineExpose({toLoginName});
 
 function goToHome() {
   router.push('/');

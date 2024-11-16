@@ -1,45 +1,35 @@
-<script>
+<script setup>
+import Card from "@/components/Card.vue";
+import {onMounted, ref} from "vue";
+import {request} from "@/utils/fetch.js";
+
+let catalog
+const filtered = ref(null)
+const searchQuery = ref('')
+
+onMounted(async () => {
+  try {
+    catalog = await request("/catalog", "GET")
+    filtered.value = catalog
+  } catch {
+  }
+})
+
+const search = async () => {
+  filtered.value = catalog.filter(item =>
+      item.label.toLowerCase().includes(searchQuery.value.toLowerCase())
+  );
+}
 </script>
 
 <template>
   <div class="body">
     <h1 class="headings">Ассортимент продукции</h1>
     <div class="input">
-      <input class="search" placeholder="Поиск" type="search"/>
+      <input v-model="searchQuery" class="search" placeholder="Поиск" type="search" @input="search"/>
     </div>
     <div class="grid">
-      <div class="box">
-        <img height="120" src="/src/assets/img/trubifitingi.png" width="120"/>
-        Трубофиттинги
-      </div>
-      <div class="box">
-        <img height="120" src="/src/assets/img/vodonagrev.png" width="120"/>
-        Водонагреватели
-      </div>
-      <div class="box">
-        <img height="120" src="/src/assets/img/nasos.png" width="120"/>
-        Насосное оберудование
-      </div>
-      <div class="box">
-        <img height="120" src="/src/assets/img/kotelnoe.png" width="120"/>
-        Котельное оберудование
-      </div>
-      <div class="box">
-        <img height="120" src="/src/assets/img/radiator.png" width="120"/>
-        Радиаторы
-      </div>
-      <div class="box">
-        <img height="120" src="/src/assets/img/zapornaya.png" width="120"/>
-        Запорная арматура
-      </div>
-      <div class="box">
-        <img height="120" src="/src/assets/img/santehnika.png" width="120"/>
-        Сантехника
-      </div>
-      <div class="box">
-        <img height="120" src="/src/assets/img/termoreg.png" width="120"/>
-        Терморегулирующая арматура
-      </div>
+      <Card v-for="(el) in filtered" :obj="el"/>
     </div>
   </div>
 </template>
