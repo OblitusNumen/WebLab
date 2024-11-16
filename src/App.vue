@@ -1,19 +1,15 @@
 <template>
-  <Header />
+  <!-- Bind the ref to the Header component instance -->
+  <Header/>
   <div class="content">
     <router-view />
   </div>
   <Footer />
 </template>
 
-<script>
+<script setup>
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
-
-export default {
-  name: 'App',
-  components: { Footer, Header }
-}
 </script>
 
 <style scoped>

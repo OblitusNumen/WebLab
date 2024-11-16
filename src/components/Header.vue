@@ -1,28 +1,49 @@
 <template>
   <header width="100%">
     <div class="header">
-      <img src="/src/assets/img/logo.png" alt="Фаренгейт" height="44">
+      <img alt="Фаренгейт" height="44" src="/src/assets/img/logo.png">
       <div class="navBar">
-        <button @click="goToHome" class="navButton">Главная</button>
-        <button @click="goToCatalog" class="navButton">Каталог</button>
-        <button @click="goToContacts" class="navButton">Контакты</button>
-        <button @click="goToAbout" class="navButton">О нас</button>
-        <button @click="goToLogin" class="loginButton">Вход</button>
+        <button class="navButton" @click="goToHome">Главная</button>
+        <button class="navButton" @click="goToCatalog">Каталог</button>
+        <button class="navButton" @click="goToContacts">Контакты</button>
+        <button class="navButton" @click="goToAbout">О нас</button>
+        <button class="loginButton" @click="goToLogin">{{ loginButtonName }}</button>
       </div>
     </div>
   </header>
 </template>
 
-<script>
-export default {
-  name: 'Header',
-};
-</script>
-
 <script setup>
 import {useRouter} from 'vue-router';
+import {onMounted, onUnmounted, ref} from 'vue';
+import {getUserEmail} from "@/utils/utils.js";
+let intervalId; // Variable to hold the interval ID
+
+const name = 'Header';
 
 const router = useRouter();
+
+const loginButtonName = ref('Вход');
+
+// Call toLoginName when the component is mounted
+onMounted(() => {
+  toLoginName(); // Call once immediately on mount
+  intervalId = setInterval(toLoginName, 1000); // Schedule to run every second
+});
+
+// Clear the interval when the component is unmounted
+onUnmounted(() => {
+  clearInterval(intervalId);
+});
+
+const toLoginName = async () => {
+  const email = await getUserEmail()
+  if (email != null) {
+    loginButtonName.value = email; // Set the reactive value
+  } else {
+    loginButtonName.value = 'Вход'; // Set the default login text
+  }
+};
 
 function goToHome() {
   router.push('/');

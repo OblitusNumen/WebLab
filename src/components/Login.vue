@@ -1,68 +1,123 @@
 <template>
   <div class="form-container">
-    <div v-if="isLogin" class="form-card">
-      <h2>Вход</h2>
-      <form @submit.prevent="handleLogin">
-        <div class="form-group">
-          <label for="login-email">Email:</label>
-          <input type="email" id="login-email" v-model="loginEmail" required />
-        </div>
-        <div class="form-group">
-          <label for="login-password">Пароль:</label>
-          <input type="password" id="login-password" v-model="loginPassword" required />
-        </div>
-        <button type="submit">Войти</button>
-        <p @click="toggleForm" class="toggle-link">Регистрация</p>
-      </form>
-    </div>
+    <div v-if="email == null">
+      <div v-if="isLogin" class="form-card">
+        <h2>Вход</h2>
+        <form @submit.prevent="handleLogin">
+          <div class="form-group">
+            <label for="login-email">Email:</label>
+            <input id="login-email" v-model="loginData.email" required type="email"/>
+          </div>
+          <div class="form-group">
+            <label for="login-password">Пароль:</label>
+            <input id="login-password" v-model="loginData.password" required type="password"/>
+          </div>
+          <button type="submit">Войти</button>
+          <p v-if="loginError !== ''" class="error">{{ loginError }}</p>
+          <p class="toggle-link" @click="toggleForm">Регистрация</p>
+        </form>
+      </div>
 
+      <div v-else class="form-card">
+        <h2>Регистрация</h2>
+        <form @submit.prevent="handleRegister">
+          <div class="form-group">
+            <label for="register-email">Email:</label>
+            <input id="register-email" v-model="registerData.email" required type="email"/>
+          </div>
+          <div class="form-group">
+            <label for="register-password">Пароль:</label>
+            <input id="register-password" v-model="registerData.password" required type="password"/>
+          </div>
+          <div class="form-group">
+            <label for="confirm-password">Подтверждение пароля:</label>
+            <input id="confirm-password" v-model="registerData.password_confirm" required type="password"/>
+          </div>
+          <button type="submit">Зарегистрироваться</button>
+          <p v-if="registerError !== ''" class="error">{{ registerError }}</p>
+          <p class="toggle-link" @click="toggleForm">Вход</p>
+        </form>
+      </div>
+    </div>
     <div v-else class="form-card">
-      <h2>Регистрация</h2>
-      <form @submit.prevent="handleRegister">
-        <div class="form-group">
-          <label for="register-email">Email:</label>
-          <input type="email" id="register-email" v-model="registerEmail" required />
-        </div>
-        <div class="form-group">
-          <label for="register-password">Пароль:</label>
-          <input type="password" id="register-password" v-model="registerPassword" required />
-        </div>
-        <div class="form-group">
-          <label for="confirm-password">Подтверждение пароля:</label>
-          <input type="password" id="confirm-password" v-model="confirmPassword" required />
-        </div>
-        <button type="submit">Зарегистрироваться</button>
-        <p @click="toggleForm" class="toggle-link">Вход</p>
+      <h2>{{ email }}</h2>
+      <form @submit.prevent="handleLogout">
+        <button type="submit">Выход</button>
       </form>
     </div>
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      isLogin: true,
-      loginEmail: '',
-      loginPassword: '',
-      registerEmail: '',
-      registerPassword: '',
-      confirmPassword: '',
-    };
-  },
-  methods: {
-    toggleForm() {
-      this.isLogin = !this.isLogin;
-    },
-    handleLogin() {
-      // Handle login logic here
-      console.log('Logging in with:', this.loginEmail, this.loginPassword);
-    },
-    handleRegister() {
-      // Handle registration logic here
-      console.log('Registering with:', this.registerEmail, this.registerPassword);
-    },
-  },
+<script setup>
+import {onMounted, ref} from 'vue';
+import {request} from "@/utils/fetch.js";
+import {getUserEmail} from "@/utils/utils.js";
+
+// Reactive state
+const isLogin = ref(true);
+
+const email = ref(null);
+
+const loginError = ref('');
+const registerError = ref('');
+
+const loginData = ref({
+  email: '',
+  password: ''
+})
+
+onMounted(async () => {
+  await setupAuth();
+});
+
+async function setupAuth() {
+  email.value = await getUserEmail()
+  // await toLoginName()
+}
+
+const registerData = ref({
+  email: '',
+  password: '',
+  password_confirm: ''
+})
+
+// Methods
+const toggleForm = () => {
+  isLogin.value = !isLogin.value;
+};
+
+const handleLogout = async () => {
+  try {
+    await request("/auth/logout", 'POST');
+  } catch (error) {
+  }
+  await setupAuth()
+};
+
+const handleLogin = async () => {
+  try {
+    await request("/auth/login", 'POST', loginData.value);
+    loginData.value = {
+      email: '',
+      password: ''
+    }
+  } catch (error) {
+    loginError.value = error.detail
+  }
+  await setupAuth()
+};
+
+const handleRegister = async () => {
+  try {
+    await request("/auth/register", 'POST', registerData.value);
+    registerData.value = {
+      email: '',
+      password: '',
+      password_confirm: ''
+    }
+  } catch (error) {
+    registerError.value = error.detail
+  }
 };
 </script>
 
@@ -116,6 +171,11 @@ button {
 
 button:hover {
   background-color: #0056b3; /* Darker shade on hover */
+}
+
+.error {
+  text-align: center;
+  color: #ff5f50; /* Link color */
 }
 
 .toggle-link {

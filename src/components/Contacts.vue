@@ -7,10 +7,11 @@
         <p><strong>Email:</strong><br> info@farengeit-online.ru</p>
         <p><strong>Телефон:</strong><br> +7 495 260-18-27</p>
         <p><strong>Адрес пункта выдачи:</strong><br> МО, г. Королев, ул. Полевая 43/12</p>
-        <p><strong>Адрес склада:</strong><br> г. Москва, 43-й км МКАД, Логистический центр «Славянский мир» павильон 27, ворота 7</p>
+        <p><strong>Адрес склада:</strong><br> г. Москва, 43-й км МКАД, Логистический центр «Славянский мир» павильон 27,
+          ворота 7</p>
         <p><strong>Режим работы:</strong><br> Пн. – Сб.: с 9:00 до 19:00 <br>Вс. - выходной</p>
       </div>
-      <img src="/src/assets/img/map.png" height="481" width="569" alt="Карта"/>
+      <img alt="Карта" height="481" src="/src/assets/img/map.png" width="569"/>
     </div>
 
     <div class="form-section">
@@ -18,15 +19,15 @@
       <form @submit.prevent="submitForm">
         <div class="form-group">
           <label for="name">Имя:</label>
-          <input type="text" id="name" v-model="name" required />
+          <input id="name" v-model="form.name" required type="text"/>
         </div>
         <div class="form-group">
           <label for="email">Email:</label>
-          <input type="email" id="email" v-model="email" required />
+          <input id="email" v-model="form.email" required type="email"/>
         </div>
         <div class="form-group">
           <label for="message">Ваше сообщение:</label>
-          <textarea id="message" v-model="msg" rows="7" required></textarea>
+          <textarea id="message" v-model="form.msg" required rows="7"></textarea>
         </div>
         <button type="submit">Отправить</button>
       </form>
@@ -35,54 +36,21 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import {ref} from 'vue';
+import {request} from "@/utils/fetch.js";
 
-const name = ref('');
-const email = ref('');
-const msg = ref('');
+const form = ref({
+  name: '',
+  email: '',
+  msg: '',
+})
 
 const submitForm = async () => {
-  console.log(
-      {
-        name: name.value,
-        email: email.value,
-        msg: msg.value,
-      }
-  );
-
-  // Send a POST request to the FastAPI backend
-  await fetch('/api/feedback/', {
-    method: 'POST',
-    // headers: {
-      // 'Content-Type': 'application/json',  // Specify that you're sending JSON data
-      // 'Origin': 'http://localhost:5173',
-      // 'Access-Control-Allow-Origin': 'http://localhost:5173'
-    // },
-    body: {
-      name: name.value,
-      email: email.value,
-      msg: msg.value,
-    },
-  })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log('Success:', data);
-        // Handle success, e.g., display a success message to the user
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-        // Handle error, e.g., display an error message to the user
-      });
-
+  await request("/feedback", 'POST', form.value)
   // Reset form fields after submission
-  name.value = '';
-  email.value = '';
-  msg.value = '';
+  form.value.name = '';
+  form.value.email = '';
+  form.value.msg = '';
 };
 </script>
 
