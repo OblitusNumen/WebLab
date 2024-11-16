@@ -49,30 +49,40 @@
 </template>
 
 <script setup>
-import {onMounted, ref} from 'vue';
-import {request} from "@/utils/fetch.js";
+import {inject, onMounted, ref} from 'vue';
 import {getUserEmail} from "@/utils/utils.js";
+import {request} from "@/utils/fetch.js";
 
-// Reactive state
+// Inject the headerRef provided by App.vue
+const headerRef = inject('headerRef');
+
 const isLogin = ref(true);
-
 const email = ref(null);
-
 const loginError = ref('');
 const registerError = ref('');
-
 const loginData = ref({
   email: '',
   password: ''
-})
+});
 
 onMounted(async () => {
   await setupAuth();
 });
 
 async function setupAuth() {
-  email.value = await getUserEmail()
-  // await toLoginName()
+  email.value = await getUserEmail();
+
+  // Wait until the headerRef is fully available and the Header component is mounted
+  if (headerRef && headerRef.value) {
+    // Ensure that `headerRef.value.toLoginName` is defined
+    if (typeof headerRef.value.toLoginName === 'function') {
+      await headerRef.value.toLoginName(); // Call the method from Header
+    } else {
+      console.error('toLoginName is not a function on the Header component');
+    }
+  } else {
+    console.error('headerRef is not available');
+  }
 }
 
 const registerData = ref({

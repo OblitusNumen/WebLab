@@ -15,9 +15,8 @@
 
 <script setup>
 import {useRouter} from 'vue-router';
-import {onMounted, onUnmounted, ref} from 'vue';
+import {onMounted, ref} from 'vue';
 import {getUserEmail} from "@/utils/utils.js";
-let intervalId; // Variable to hold the interval ID
 
 const name = 'Header';
 
@@ -28,12 +27,6 @@ const loginButtonName = ref('Вход');
 // Call toLoginName when the component is mounted
 onMounted(() => {
   toLoginName(); // Call once immediately on mount
-  intervalId = setInterval(toLoginName, 1000); // Schedule to run every second
-});
-
-// Clear the interval when the component is unmounted
-onUnmounted(() => {
-  clearInterval(intervalId);
 });
 
 const toLoginName = async () => {
@@ -44,6 +37,8 @@ const toLoginName = async () => {
     loginButtonName.value = 'Вход'; // Set the default login text
   }
 };
+
+defineExpose({ toLoginName });
 
 function goToHome() {
   router.push('/');
