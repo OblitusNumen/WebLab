@@ -26,7 +26,7 @@
         </div>
         <div class="form-group">
           <label for="message">Ваше сообщение:</label>
-          <textarea id="message" v-model="message" rows="7" required></textarea>
+          <textarea id="message" v-model="msg" rows="7" required></textarea>
         </div>
         <button type="submit">Отправить</button>
       </form>
@@ -34,30 +34,55 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      name: '',
-      email: '',
-      message: ''
-    };
-  },
-  methods: {
-    submitForm() {
-      // Handle form submission logic here
-      console.log('Form submitted:', {
-        name: this.name,
-        email: this.email,
-        message: this.message
+<script setup>
+import { ref } from 'vue';
+
+const name = ref('');
+const email = ref('');
+const msg = ref('');
+
+const submitForm = async () => {
+  console.log(
+      {
+        name: name.value,
+        email: email.value,
+        msg: msg.value,
+      }
+  );
+
+  // Send a POST request to the FastAPI backend
+  await fetch('/api/feedback/', {
+    method: 'POST',
+    // headers: {
+      // 'Content-Type': 'application/json',  // Specify that you're sending JSON data
+      // 'Origin': 'http://localhost:5173',
+      // 'Access-Control-Allow-Origin': 'http://localhost:5173'
+    // },
+    body: {
+      name: name.value,
+      email: email.value,
+      msg: msg.value,
+    },
+  })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log('Success:', data);
+        // Handle success, e.g., display a success message to the user
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        // Handle error, e.g., display an error message to the user
       });
 
-      // Reset form fields after submission
-      this.name = '';
-      this.email = '';
-      this.message = '';
-    }
-  }
+  // Reset form fields after submission
+  name.value = '';
+  email.value = '';
+  msg.value = '';
 };
 </script>
 
