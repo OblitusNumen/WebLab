@@ -72,6 +72,7 @@ function goToLogin() {
 
 .loginButton {
   background-color: #a1d0ff;
+  text-overflow: ellipsis;
 }
 
 .loginButton:hover, .navButton:hover {

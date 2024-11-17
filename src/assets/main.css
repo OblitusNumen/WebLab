@@ -19,6 +19,7 @@ body {
 .headings {
     margin: 10px;
     text-align: center;
+    width: 100%;
 }
 
 html {

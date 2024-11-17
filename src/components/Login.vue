@@ -40,7 +40,7 @@
       </div>
     </div>
     <div v-else class="form-card">
-      <h2>{{ email }}</h2>
+      <h2 class="long">{{ email }}</h2>
       <form @submit.prevent="handleLogout">
         <button type="submit">Выход</button>
       </form>
@@ -125,6 +125,7 @@ const handleRegister = async () => {
       password: '',
       password_confirm: ''
     }
+    toggleForm()
   } catch (error) {
     registerError.value = error.detail
   }
@@ -139,6 +140,7 @@ const handleRegister = async () => {
   justify-content: center;
   height: 100vh; /* Full viewport height */
   /*background-color: #c2c2c2; /* Light background color */
+  text-overflow: ellipsis;
 }
 
 .form-card {
@@ -146,7 +148,8 @@ const handleRegister = async () => {
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  width: 300px; /* Fixed width for form card */
+  width: 30rem; /* Fixed width for form card */
+  text-overflow: ellipsis;
 }
 
 h2 {
@@ -192,5 +195,9 @@ button:hover {
   text-align: center;
   color: #007bff; /* Link color */
   cursor: pointer; /* Pointer cursor */
+}
+
+.long {
+  text-overflow: ellipsis;
 }
 </style>
