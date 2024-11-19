@@ -1,6 +1,11 @@
 <template>
   <footer class="footer">
-    <p class="footer">&copy; 2024 Фаренгейт. Все права защищены.</p>
+    <p class="footer">
+      &copy; 2024 Фаренгейт. Все права защищены.
+      <a class="privacy-policy" href="@/assets/privacy-policy.pdf" target="_blank" download="Политика_конфиденциальности.pdf">
+        Политика конфиденциальности
+      </a>
+    </p>
   </footer>
 </template>
 
@@ -20,5 +25,10 @@
   background-color: #e4e4e4;
   padding: 4px; /* Example padding */
   justify-content: center; /* Center content horizontally */
+}
+
+.privacy-policy {
+  padding-left: 5px;
+  color: #5d5d5d;
 }
 </style>
