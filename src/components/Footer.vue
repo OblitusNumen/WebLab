@@ -17,28 +17,37 @@ const openPrivacyPolicy = () => {
   // Dynamically inject the required scripts and Vue app to the new window
   newWindow.document.write(`
   <!DOCTYPE html>
-    <html lang="en">
+<html lang="en">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Политика конфиденциальности</title>
-    <link rel="stylesheet" href="../assets/privacy-policy.css">
     <style>
-      /* Ensure body and html take full height */
+      /* Make sure html and body stretch to full height and allow scrolling */
       html, body {
         height: 100%;
         margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        overflow-y: scroll; /* Ensure scrolling is always enabled */
       }
 
-      /* Make the body scrollable if content overflows */
-      body {
-        overflow-y: auto; /* Enables vertical scrolling */
-        padding: 20px; /* Add some padding for better aesthetics */
+      /* Style the content container */
+      .markdown {
+        max-width: 800px; /* Optional: Limit the width for readability */
+        margin: 20px auto; /* Center horizontally and add vertical margin */
+        padding: 20px;
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        background: #f9f9f9; /* Light background for the content area */
+        border: 1px solid #ddd; /* Add a border for better structure */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for emphasis */
       }
 
-      /* Optional: Style the button */
+      /* Style the button */
       button {
-        margin-top: 20px;
+        margin: 20px auto;
+        display: block;
         padding: 10px 20px;
         background-color: #4CAF50;
         color: white;
@@ -54,7 +63,6 @@ const openPrivacyPolicy = () => {
   </head>
   <body>
     <div class="markdown">
-      <hr>
       <h2>Политика конфиденциальности</h2>
       <p><strong>Дата вступления в силу: 01.11.2024</strong></p>
       <p>Интернет-магазин сантехники "Фаренгейт" (далее – "Магазин") уважает вашу конфиденциальность и обязуется защищать
@@ -120,9 +128,8 @@ const openPrivacyPolicy = () => {
         <li><strong>Адрес:</strong> МО, г. Королев, ул. Полевая 43/12</li>
       </ul>
       <p><strong>Спасибо, что выбираете "Фаренгейт"!</strong></p>
-      <hr>
     </div>
-    <a class="privacy-policy" href="../assets/privacy-policy.pdf" target="_blank" download="Политика_конфиденциальности.pdf">
+    <a class="privacy-policy" href="../../src/assets/privacy-policy.pdf" target="_blank" download="Политика_конфиденциальности.pdf">
         <button>Скачать файл</button>
     </a>
   </body>
