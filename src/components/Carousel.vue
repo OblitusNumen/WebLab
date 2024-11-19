@@ -9,25 +9,25 @@
     >
       <swiper-slide>
         <div class="box">
-          <img height="120" src="/src/assets/img/trubifitingi.png" width="120" />
+          <img height="120" src="/src/assets/img/trubifitingi.png" width="120"/>
           Трубофиттинги
         </div>
       </swiper-slide>
       <swiper-slide>
         <div class="box">
-          <img height="120" src="/src/assets/img/vodonagrev.png" width="120" />
+          <img height="120" src="/src/assets/img/vodonagrev.png" width="120"/>
           Водонагреватели
         </div>
       </swiper-slide>
       <swiper-slide>
         <div class="box">
-          <img height="120" src="/src/assets/img/nasos.png" width="120" />
+          <img height="120" src="/src/assets/img/nasos.png" width="120"/>
           Насосное оберудование
         </div>
       </swiper-slide>
       <swiper-slide>
         <div class="box">
-          <img height="120" src="/src/assets/img/kotelnoe.png" width="120" />
+          <img height="120" src="/src/assets/img/kotelnoe.png" width="120"/>
           Котельное оберудование
         </div>
       </swiper-slide>
@@ -36,8 +36,8 @@
 </template>
 
 <script setup>
-import { Swiper, SwiperSlide } from 'swiper/vue';
-import { Navigation, Pagination } from 'swiper/modules';
+import {Swiper, SwiperSlide} from 'swiper/vue';
+import {Navigation, Pagination} from 'swiper/modules';
 import 'swiper/swiper-bundle.css';
 </script>
 
