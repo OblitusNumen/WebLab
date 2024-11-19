@@ -5,24 +5,7 @@
       оборудования, установок и комплектующих для систем водоснабжения, климатической техники, а так же сантехники и
       сопутствующих товаров. В продаже – изделия высокого качества известных российских и зарубежных брендов.
     </b>
-    <div class="row">
-      <div class="box">
-        <img height="120" src="/src/assets/img/trubifitingi.png" width="120"/>
-        Трубофиттинги
-      </div>
-      <div class="box">
-        <img height="120" src="/src/assets/img/vodonagrev.png" width="120"/>
-        Водонагреватели
-      </div>
-      <div class="box">
-        <img height="120" src="/src/assets/img/nasos.png" width="120"/>
-        Насосное оберудование
-      </div>
-      <div class="box">
-        <img height="120" src="/src/assets/img/kotelnoe.png" width="120"/>
-        Котельное оберудование
-      </div>
-    </div>
+    <Carousel/>
     <h2 class="headings">Ассортимент продукции</h2>
     В каталоге на сайте представлено оборудование и приспособления, сопутствующие детали для монтажа элементов систем
     водоснабжения и отопления, климатическая техника и сантехника. У нас вы можете заказать:
@@ -60,24 +43,11 @@
       <a href="https://farengeit-online.ru/brands/evan/"><img alt="Evan" height="54" src="/src/assets/img/evan.jpg"
                                                               width="200"/></a>
     </div>
-    <table>
-      <tr>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-      </tr>
-    </table>
   </div>
 </template>
 
-<script>
-import Header from "@/components/Header.vue";
-
-export default {
-  name: 'Home',
-  components: {Header}
-}
+<script setup>
+import Carousel from "@/components/Carousel.vue";
 </script>
 
 <style scoped>
