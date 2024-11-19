@@ -54,6 +54,7 @@ import 'swiper/swiper-bundle.css';
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding-bottom: 40px;
 }
 
 img {

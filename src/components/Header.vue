@@ -81,6 +81,8 @@ function goToLogin() {
 }
 
 .header {
+  z-index: 1000; /* Make sure the header is on top of other elements */
+  border-bottom: 2px solid #bbbbbb;
   display: flex;
   justify-content: space-between;
   width: 100%;
