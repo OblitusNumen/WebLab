@@ -7,8 +7,11 @@
         <button class="navButton" @click="goToCatalog">Каталог</button>
         <button class="navButton" @click="goToContacts">Контакты</button>
         <button class="navButton" @click="goToAbout">О нас</button>
-        <button v-if="loginButtonName !== 'Вход'" class="cartButton" @click="toggleCartView">🛒 Корзина</button>
-<!--        <button class="cartButton" @click="toggleCartView">🛒 Корзина</button>-->
+        <button v-if="loginButtonName !== 'Вход'" class="cartButton" @click="toggleCartView">
+          🛒 Корзина
+          <!-- Show the cart count as a small badge -->
+          <span v-if="cartCount > 0" class="cartCountBadge">{{ cartCount }}</span>
+        </button>
         <button class="loginButton" @click="goToLogin">{{ loginButtonName }}</button>
       </div>
     </div>
@@ -31,7 +34,7 @@ const countCart = async () => {
   let sum = 0;
   const cart = await request("/catalog/cart", 'GET');
   cart.contents.forEach(e => sum += e.count)
-  cartCount.value = sum
+  cartCount.value = sum;  // Update the cartCount with the total item count
 }
 
 // Provide the headerRef so it can be injected into child components
@@ -110,6 +113,7 @@ function goToLogin() {
   height: 40px;
   border-radius: 10px;
   font-size: 16px;
+  position: relative; /* Position relative to place the badge on top-right */
 }
 
 .loginButton {
@@ -137,5 +141,21 @@ function goToLogin() {
   display: flex;
   align-items: center;
   margin-left: auto;
+}
+
+/* Style for the cart count badge */
+.cartCountBadge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: #ff0000;
+  color: white;
+  font-size: 12px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
 }
 </style>

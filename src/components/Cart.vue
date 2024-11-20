@@ -9,7 +9,7 @@
           <CartCard v-for="(el) in cart.contents" :obj="el" :discount="cart.discount"/>
         </div>
           <div class="promo" v-if="!cart.discount">
-            <input  id="email" v-model="promo"/>
+            <input  id="email" placeholder="Введите промокод" v-model="promo"/>
             <button @click="apply">Применить</button>
           </div>
         <div v-if="cart.discount">Сумма: <s>{{ sum }}</s> {{ discountSum }} Руб.</div>
@@ -83,6 +83,7 @@ const apply = async () => {
   if (promo.value === 'PROMO') {
     cart.value.discount = true;
     await request("/catalog/updcart", 'POST', cart.value);
+    await headerRef.value.countCart()
   }
 }
 

@@ -21,6 +21,9 @@ const itemCount = ref(props.obj.count || 1); // Default count, or from props
 // Inject the cartRef provided by App.vue
 const cartRef = inject('cartRef');
 
+// Inject the headerRef provided by App.vue
+const headerRef = inject('headerRef');
+
 // import { watch } from 'vue';
 //
 // watch(cartRef, (newValue) => {
@@ -69,20 +72,6 @@ const removeFromCart = async () => {
   await updateCartView()
 };
 
-const updateCartView = async () => {
-// Wait until the headerRef is fully available and the Header component is mounted
-  if (cartRef && cartRef.value) {
-    // Ensure that `headerRef.value.toLoginName` is defined
-    if (typeof cartRef.value.updateCart === 'function') {
-      await cartRef.value.updateCart() // Call the method
-    } else {
-      console.error('toLoginName is not a function on the Header component');
-    }
-  } else {
-    console.error('headerRef is not available');
-  }
-}
-
 // Update the cart on the server
 const updateCart = async () => {
   const cart = await request("/catalog/cart", 'GET');
@@ -96,6 +85,21 @@ const updateCart = async () => {
   await request("/catalog/updcart", 'POST', cart);
   await updateCartView()
 };
+
+const updateCartView = async () => {
+// Wait until the headerRef is fully available and the Header component is mounted
+  if (cartRef && cartRef.value) {
+    // Ensure that `headerRef.value.toLoginName` is defined
+    if (typeof cartRef.value.updateCart === 'function') {
+      await cartRef.value.updateCart() // Call the method
+    } else {
+      console.error('toLoginName is not a function on the Header component');
+    }
+  } else {
+    console.error('headerRef is not available');
+  }
+  await headerRef.value.countCart()
+}
 </script>
 
 <template>

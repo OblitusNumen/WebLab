@@ -1,5 +1,5 @@
 <script setup>
-import {defineProps, onMounted, ref} from 'vue';
+import {defineProps, inject, onMounted, ref} from 'vue';
 import {request} from "@/utils/fetch.js";
 import {getUserEmail} from "@/utils/utils.js";
 
@@ -10,6 +10,9 @@ const props = defineProps({
     required: true,
   },
 });
+
+// Inject the headerRef provided by App.vue
+const headerRef = inject('headerRef');
 
 const authorized = ref(false)
 
@@ -33,6 +36,7 @@ const addToCart = async () => {
 
   // Optionally update the server with the new cart
   await request("/catalog/updcart", 'POST', cart);
+  await headerRef.value.countCart()
 };
 </script>
 
