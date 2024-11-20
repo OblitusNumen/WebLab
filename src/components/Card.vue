@@ -1,8 +1,7 @@
 <script setup>
-import { defineProps, inject } from 'vue';
-
-// Inject the cart reference from the parent or global provider
-const headerRef = inject('headerRef');
+import {defineProps, onMounted, ref} from 'vue';
+import {request} from "@/utils/fetch.js";
+import {getUserEmail} from "@/utils/utils.js";
 
 // Define the props the component will accept
 const props = defineProps({
@@ -12,10 +11,29 @@ const props = defineProps({
   },
 });
 
+const authorized = ref(false)
+
+onMounted(async () => {
+  authorized.value = await getUserEmail() != null
+})
+
 // Function to add the item to the cart
-function addToCart() {
-    headerRef.value.getCart().push({id: props.obj.id, count: 1});
-}
+const addToCart = async () => {
+  const item = {
+    id: props.obj.id,
+    count: 1
+  }
+  const cart = await request("/catalog/cart", 'GET');
+  const existingItem = cart.contents.find(cartItem => cartItem.id === item.id);
+  if (existingItem) {
+    existingItem.count += item.count;
+  } else {
+    cart.contents.push(item);
+  }
+
+  // Optionally update the server with the new cart
+  await request("/catalog/updcart", 'POST', cart);
+};
 </script>
 
 <template>
@@ -27,7 +45,7 @@ function addToCart() {
       {{ props.obj.price }} Руб.
     </div>
     <!-- Add to Cart Button -->
-    <button class="add-to-cart-btn" @click="addToCart">Добавить в корзину</button>
+    <button v-if="authorized" class="add-to-cart-btn" @click="addToCart">Добавить в корзину</button>
   </div>
 </template>
 
@@ -37,11 +55,12 @@ function addToCart() {
 }
 
 .add-to-cart-btn {
-  margin: 10px;
-  width: 60%;
-  height: 40px;
-  border-radius: 10px;
-  font-size: 16px;
+  margin-top: 16px;
+  padding: 8px 16px;
+  background-color: #a1d0ff;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
 }
 
 .add-to-cart-btn:hover {

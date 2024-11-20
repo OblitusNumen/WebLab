@@ -3,23 +3,27 @@
     <div class="cartContainer">
       <h2>Корзина</h2>
       <!-- Replace with your cart items here -->
-      <p v-if="cart == null || cart.length === 0">Ваша корзина пуста</p>
+      <p v-if="cart.contents == null || cart.contents.length === 0">Ваша корзина пуста</p>
       <div v-else class="grid">
-        <CartCard v-for="(el) in cart" :obj="el"/>
+        <CartCard v-for="(el) in cart.contents" :obj="el"/>
       </div>
       <button @click="closeCart">Закрыть</button>
     </div>
   </div>
 </template>
 <script setup>
-import {inject, ref} from 'vue';
+import {inject, onMounted, ref} from 'vue';
 import {request} from "@/utils/fetch.js";
 import CartCard from "@/components/CartCard.vue";
 
-const cart = ref([{id: 'a'},{id: 'b'}])
+const cart = ref(null)
 
 // Inject the headerRef provided by App.vue
 const headerRef = inject('headerRef');
+
+onMounted(async () => {
+  cart.value = await request("/catalog/cart", 'GET');
+})
 
 function closeCart() {
   // Wait until the headerRef is fully available and the Header component is mounted
@@ -38,21 +42,6 @@ function closeCart() {
 const updateCart = async () => {
   cart.value = await request("/catalog/cart", 'GET');
 }
-
-const push = async (item) => {
-  const existingItem = cart.value.find(cartItem => cartItem.id === item.id);
-
-    if (existingItem) {
-        // If found, increase the count
-        existingItem.count += item.count;
-    } else {
-        // If not found, append the new item to the cart
-        cart.value.push(item);
-    }
-    await request("/catalog/updcart", 'POST', cart)
-  await updateCart()
-};
-defineExpose({push})
 </script>
 <style scoped>
 
@@ -81,9 +70,8 @@ defineExpose({push})
 .cartContainer button {
   margin-top: 16px;
   padding: 8px 16px;
-  background-color: #ff5722;
+  background-color: #a1d0ff;
   border: none;
-  color: #fff;
   cursor: pointer;
   border-radius: 4px;
 }

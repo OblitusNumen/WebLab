@@ -40,7 +40,13 @@ const isCartVisible = ref(false);
 // Toggle cart visibility
 const toggleCartView = async () => {
   isCartVisible.value = !isCartVisible.value;
-  await cartRef.value.updateCart()
+  if (cartRef.value && typeof cartRef.value.updateCart === 'function') {
+    await cartRef.value.updateCart();
+  } else if (!cartRef.value) {
+    console.error("Cart reference is not initialized yet. Please wait for it to mount.");
+  } else {
+    console.error("updateCart method is not available on Cart component.");
+  }
 };
 
 // Call toLoginName when the component is mounted
@@ -57,12 +63,7 @@ const toLoginName = async () => {
   }
 };
 
-const getCart = () => {
-  console.log('cartRef.value')
-  console.log(cartRef.value)
-  return cartRef.value;
-};
-defineExpose({toLoginName, toggleCartView, getCart});
+defineExpose({toLoginName, toggleCartView});
 
 function goToHome() {
   router.push('/');
