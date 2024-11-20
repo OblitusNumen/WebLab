@@ -2,16 +2,16 @@
   <div class="cartOverlay">
     <div class="cartContainer">
       <h2>Корзина</h2>
-        <!-- Replace with your cart items here -->
-        <p v-if="cart == null || cart.contents == null || cart.contents.length === 0">Ваша корзина пуста</p>
-        <div v-else class="cartContent">
-        <div class="grid" :key="contentKey">
-          <CartCard v-for="(el) in cart.contents" :obj="el" :discount="cart.discount"/>
+      <!-- Replace with your cart items here -->
+      <p v-if="cart == null || cart.contents == null || cart.contents.length === 0">Ваша корзина пуста</p>
+      <div v-else class="cartContent">
+        <div :key="contentKey" class="grid">
+          <CartCard v-for="(el) in cart.contents" :discount="cart.discount" :obj="el"/>
         </div>
-          <div class="promo" v-if="!cart.discount">
-            <input  id="email" placeholder="Введите промокод" v-model="promo"/>
-            <button @click="apply">Применить</button>
-          </div>
+        <div v-if="!cart.discount" class="promo">
+          <input id="email" v-model="promo" placeholder="Введите промокод"/>
+          <button @click="apply">Применить</button>
+        </div>
         <div v-if="cart.discount">Сумма: <s>{{ sum }}</s> {{ discountSum }} Руб.</div>
         <div v-else class="price">Сумма: {{ sum }} Руб.</div>
       </div>

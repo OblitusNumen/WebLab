@@ -43,9 +43,9 @@ const addToCart = async () => {
 <template>
   <div class="box">
     <img :draggable="false" :src="'/src/assets' + props.obj.path_to_image" alt="Изображение товара" height="120"
-         width="120" />
+         width="120"/>
     <div class="content">
-      <strong>{{ props.obj.label }}</strong><br />
+      <strong>{{ props.obj.label }}</strong><br/>
       <div class="price">{{ props.obj.price }} Руб.</div>
     </div>
     <!-- Add to Cart Button -->

@@ -1,6 +1,6 @@
 <script setup>
 import {defineProps, inject, onMounted, ref} from "vue";
-import { request } from "@/utils/fetch.js";
+import {request} from "@/utils/fetch.js";
 
 // Define the props the component will accept
 const props = defineProps({
@@ -64,7 +64,7 @@ const removeFromCart = async () => {
   console.log("==================")
   console.log(cart.contents)
   console.log("==================")
-      console.log(props.obj.id)
+  console.log(props.obj.id)
   cart.contents = cart.contents.filter(item => item.id !== props.obj.id)
   console.log(cart.contents)
   console.log("==================")
@@ -113,24 +113,24 @@ const updateCartView = async () => {
           width="120"
       />
       <div class="content">
-        <strong>{{ good.label }}</strong><br />
-        <div v-if="discount"><s>{{ good.price }}</s> {{ good.price * good.discount /100 }} Руб.</div>
+        <strong>{{ good.label }}</strong><br/>
+        <div v-if="discount"><s>{{ good.price }}</s> {{ good.price * good.discount / 100 }} Руб.</div>
         <div v-else class="price">{{ good.price }} Руб.</div>
       </div>
 
       <!-- Controls and Remove Button at the Bottom -->
       <div class="bottom-section">
         <div class="controls">
-          <button @click="decreaseCount" :disabled="itemCount === 1">-</button>
+          <button :disabled="itemCount === 1" @click="decreaseCount">-</button>
           <span class="count">{{ itemCount }}</span>
-          <button @click="increaseCount" :disabled="itemCount === good.in_stock">+</button>
+          <button :disabled="itemCount === good.in_stock" @click="increaseCount">+</button>
         </div>
-        <button @click="removeFromCart" class="remove-button">Убрать из корзины</button>
+        <button class="remove-button" @click="removeFromCart">Убрать из корзины</button>
       </div>
     </div>
 
     <div v-else class="content">
-      <strong>Товар не найден</strong><br />
+      <strong>Товар не найден</strong><br/>
     </div>
   </div>
 </template>

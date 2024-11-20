@@ -5,7 +5,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-  text-overflow: ellipsis;
+    text-overflow: ellipsis;
 }
 
 body {
@@ -18,7 +18,7 @@ body {
 }
 
 .price {
-  color: #0028ba;
+    color: #0028ba;
 }
 
 .headings {
