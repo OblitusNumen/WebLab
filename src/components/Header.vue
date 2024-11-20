@@ -14,17 +14,41 @@
     </div>
 
     <!-- Cart View Overlay -->
-    <div v-if="isCartVisible">
-      <Cart ref="cartRef"/>
-      </div>
+    <Cart v-if="isCartVisible" ref="cartRef"/>
   </header>
 </template>
 
 <script setup>
 import {useRouter} from 'vue-router';
-import {onMounted, ref} from 'vue';
+import {onMounted, provide, ref} from 'vue';
 import {getUserEmail} from "@/utils/utils.js";
 import Cart from "@/components/Cart.vue";
+import {request} from "@/utils/fetch.js";
+
+const cartCount = ref(0)
+
+const countCart = async () => {
+  let sum = 0;
+  const cart = await request("/catalog/cart", 'GET');
+  cart.contents.forEach(e => sum += e.count)
+  cartCount.value = sum
+}
+
+// Provide the headerRef so it can be injected into child components
+const cartRef = ref(null);
+provide('cartRef', cartRef);
+
+// import { watch } from 'vue';
+//
+// watch(cartRef, (newValue) => {
+//   console.log("--------------------------")
+//   if (newValue) {
+//     console.log("cartRef is initialized:", newValue);
+//   } else {
+//     console.log("cartRef is still null or undefined.");
+//   }
+//   console.log("--------------------------")
+// });
 
 const name = 'Header';
 
@@ -32,26 +56,19 @@ const router = useRouter();
 
 const loginButtonName = ref('Вход');
 
-const cartRef = ref(null);
-
 // State for cart visibility
 const isCartVisible = ref(false);
 
 // Toggle cart visibility
 const toggleCartView = async () => {
+  console.log(isCartVisible.value)
   isCartVisible.value = !isCartVisible.value;
-  if (cartRef.value && typeof cartRef.value.updateCart === 'function') {
-    await cartRef.value.updateCart();
-  } else if (!cartRef.value) {
-    console.error("Cart reference is not initialized yet. Please wait for it to mount.");
-  } else {
-    console.error("updateCart method is not available on Cart component.");
-  }
 };
 
 // Call toLoginName when the component is mounted
 onMounted(() => {
   toLoginName(); // Call once immediately on mount
+  countCart()
 });
 
 const toLoginName = async () => {
@@ -63,7 +80,7 @@ const toLoginName = async () => {
   }
 };
 
-defineExpose({toLoginName, toggleCartView});
+defineExpose({toLoginName, toggleCartView, countCart});
 
 function goToHome() {
   router.push('/');

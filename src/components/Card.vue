@@ -42,7 +42,7 @@ const addToCart = async () => {
          width="120" />
     <div class="content">
       <strong>{{ props.obj.label }}</strong><br />
-      {{ props.obj.price }} Руб.
+      <div class="price">{{ props.obj.price }} Руб.</div>
     </div>
     <!-- Add to Cart Button -->
     <button v-if="authorized" class="add-to-cart-btn" @click="addToCart">Добавить в корзину</button>
