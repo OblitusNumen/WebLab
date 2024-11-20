@@ -7,9 +7,16 @@
         <button class="navButton" @click="goToCatalog">Каталог</button>
         <button class="navButton" @click="goToContacts">Контакты</button>
         <button class="navButton" @click="goToAbout">О нас</button>
+        <button v-if="loginButtonName !== 'Вход'" class="cartButton" @click="toggleCartView">🛒 Корзина</button>
+<!--        <button class="cartButton" @click="toggleCartView">🛒 Корзина</button>-->
         <button class="loginButton" @click="goToLogin">{{ loginButtonName }}</button>
       </div>
     </div>
+
+    <!-- Cart View Overlay -->
+    <div v-if="isCartVisible">
+      <Cart ref="cartRef"/>
+      </div>
   </header>
 </template>
 
@@ -17,12 +24,24 @@
 import {useRouter} from 'vue-router';
 import {onMounted, ref} from 'vue';
 import {getUserEmail} from "@/utils/utils.js";
+import Cart from "@/components/Cart.vue";
 
 const name = 'Header';
 
 const router = useRouter();
 
 const loginButtonName = ref('Вход');
+
+const cartRef = ref(null);
+
+// State for cart visibility
+const isCartVisible = ref(false);
+
+// Toggle cart visibility
+const toggleCartView = async () => {
+  isCartVisible.value = !isCartVisible.value;
+  await cartRef.value.updateCart()
+};
 
 // Call toLoginName when the component is mounted
 onMounted(() => {
@@ -38,7 +57,12 @@ const toLoginName = async () => {
   }
 };
 
-defineExpose({toLoginName});
+const getCart = () => {
+  console.log('cartRef.value')
+  console.log(cartRef.value)
+  return cartRef.value;
+};
+defineExpose({toLoginName, toggleCartView, getCart});
 
 function goToHome() {
   router.push('/');
@@ -62,7 +86,7 @@ function goToLogin() {
 </script>
 
 <style scoped>
-.navButton, .loginButton {
+.navButton, .loginButton, .cartButton {
   margin: 10px;
   width: 100px;
   height: 40px;
@@ -75,7 +99,7 @@ function goToLogin() {
   text-overflow: ellipsis;
 }
 
-.loginButton:hover, .navButton:hover {
+.loginButton:hover, .navButton:hover, .cartButton:hover {
   transform: translate(0, 1px) scale(1.2);
   transition-duration: 300ms;
 }
