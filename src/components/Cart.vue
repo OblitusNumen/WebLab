@@ -14,6 +14,9 @@
         </div>
         <div v-if="cart.discount">Сумма: <s>{{ sum }}</s> {{ discountSum }} Руб.</div>
         <div v-else class="price">Сумма: {{ sum }} Руб.</div>
+        <div class="order">
+          <button @click="order">Оформить заказ</button>
+        </div>
       </div>
       <!-- Keep the button in a fixed footer -->
       <div class="cartFooter">
@@ -94,6 +97,11 @@ const updateCart = async () => {
   sum.value = await countPrice(false)
 }
 
+const order = async () => {
+  await request("/catalog/order", 'POST', cart.value)
+  await updateCart()
+}
+
 defineExpose({
   updateCart
 })
@@ -113,27 +121,34 @@ defineExpose({
   z-index: 1000;
 }
 
+.cartFooter {
+  display: flex;
+  justify-content: center;
+  position: absolute; /* Stick it to the bottom of the container */
+  bottom: 0;
+  left: 0;
+  width: 100%; /* Stretch across the container */
+  background-color: #fff; /* Ensure it matches the container background */
+  padding: 16px 0; /* Add padding for better appearance */
+}
+
 .cartContainer {
   display: flex;
-  flex-direction: column; /* Organize content vertically */
-  width: 80%; /* Adjust as needed */
-  max-height: 70%; /* Limit height to make space for scrolling */
+  flex-direction: column;
+  width: 80%;
+  height: 80%;
   background-color: #fff;
   padding: 24px;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   text-align: center;
+  position: relative; /* Enable positioning of child elements */
 }
 
 .cartContent {
-  overflow-y: auto; /* Enable vertical scrolling */
-  flex-grow: 1; /* Allow this section to take up remaining space */
-  margin-bottom: 16px; /* Space before the footer */
-}
-
-.cartFooter {
-  display: flex;
-  justify-content: center; /* Center-align the button */
+  overflow-y: auto;
+  flex-grow: 1;
+  margin-bottom: 16px; /* Ensure space above the footer */
 }
 
 .cartFooter button, .cartContent button {
@@ -143,10 +158,16 @@ defineExpose({
   border: none;
   cursor: pointer;
   border-radius: 4px;
+  text-overflow: ellipsis;
 }
 
 .promo * {
   padding: 10px;
-  margin: 20px;
+  margin: 15px;
+}
+
+.order * {
+  padding: 10px;
+  margin: 30px;
 }
 </style>
