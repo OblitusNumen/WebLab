@@ -100,6 +100,7 @@ const updateCart = async () => {
 const order = async () => {
   await request("/catalog/order", 'POST', cart.value)
   await updateCart()
+  await headerRef.value.countCart()
 }
 
 defineExpose({
